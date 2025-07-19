@@ -1,0 +1,112 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fasttechfoods-kitchen-api
+  namespace: fasttechfoods
+  labels:
+    app: fasttechfoods-kitchen-api
+    component: api
+    version: v1
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: fasttechfoods-kitchen-api
+  template:
+    metadata:
+      labels:
+        app: fasttechfoods-kitchen-api
+        azure.workload.identity/use: "true"
+    spec:
+      serviceAccountName: fasttechfoods-kitchen-workload-identity-sa
+      containers:
+      - name: fasttechfoods-kitchen-api
+        image: hackathonpostech.azurecr.io/fasttechfoods-kitchen-api:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        - containerPort: 8081
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: "Production"
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: fasttechfoods-kitchen-api-secrets
+              key: JWT_SECRET
+        - name: CONNECTION_STRING_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: fasttechfoods-kitchen-api-secrets
+              key: CONNECTION_STRING_DATABASE
+        - name: RABBITMQ_CONNECTION_STRING
+          valueFrom:
+            secretKeyRef:
+              name: fasttechfoods-kitchen-api-secrets
+              key: RABBITMQ_CONNECTION_STRING
+        volumeMounts:
+        - name: config
+          mountPath: /app/appsettings.json
+          subPath: appsettings.json
+          readOnly: true
+        - name: secrets-store
+          mountPath: "/mnt/secrets-store"
+          readOnly: true
+        - name: tmp-volume
+          mountPath: /tmp
+        securityContext:
+          capabilities:
+            add: ["SYS_RESOURCE"]
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+      volumes:
+      - name: config
+        configMap:
+          name: fasttechfoods-kitchen-api-config
+      - name: secrets-store
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "fasttechfoods-kitchen-secrets"
+      - name: tmp-volume
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fasttechfoods-kitchen-api-service
+  namespace: fasttechfoods
+  labels:
+    app: fasttechfoods-kitchen-api
+    component: service
+spec:
+  type: LoadBalancer
+  selector:
+    app: fasttechfoods-kitchen-api
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8080
+    protocol: TCP
+  - name: https
+    port: 443
+    targetPort: 8081
+    protocol: TCP
