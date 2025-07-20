@@ -15,16 +15,13 @@ namespace FastTechFoodsKitchen.Api.Controllers
     [Route("api/[controller]")]
     public class OrdersController : ControllerBase
     {
-        // private readonly IOrdersApiClient _ordersApiClient; // Removido - agora usamos banco local
         private readonly IKitchenOrderService _kitchenOrderService;
         private readonly ILogger<OrdersController> _logger;
 
         public OrdersController(
-            // IOrdersApiClient ordersApiClient, // Removido - não precisamos mais da API externa
             IKitchenOrderService kitchenOrderService, 
             ILogger<OrdersController> logger)
         {
-            // _ordersApiClient = ordersApiClient; // Removido
             _kitchenOrderService = kitchenOrderService;
             _logger = logger;
         }
@@ -102,9 +99,7 @@ namespace FastTechFoodsKitchen.Api.Controllers
             }
         }
 
-        /// <summary>
-        /// Endpoint específico da cozinha para atualizar status e publicar eventos
-        /// </summary>
+        
         [HttpPut("{orderId}/status")]
         public async Task<IActionResult> UpdateOrderStatusKitchen(string orderId, [FromBody] UpdateOrderStatusDto request)
         {
