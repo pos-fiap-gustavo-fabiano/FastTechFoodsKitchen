@@ -1,10 +1,11 @@
+using FastTechFoodsKitchen.Application.Interfaces;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace FastTechFoodsKitchen.Infrastructure.Context
 {
-    public class ApplicationDbContext
+    public class ApplicationDbContext : IApplicationDbContext
     {
         private readonly IMongoDatabase _database;
 
