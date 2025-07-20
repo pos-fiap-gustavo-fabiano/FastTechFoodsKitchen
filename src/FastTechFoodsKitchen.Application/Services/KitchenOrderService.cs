@@ -206,7 +206,7 @@ namespace FastTechFoodsKitchen.Application.Services
                 
                 if (status.HasValue)
                 {
-                    orders = await _orderRepository.GetByStatusAsync(status.Value.ToString());
+                    orders = await _orderRepository.GetByStatusAsync(status.Value.ToString().ToLower());
                 }
                 else
                 {
