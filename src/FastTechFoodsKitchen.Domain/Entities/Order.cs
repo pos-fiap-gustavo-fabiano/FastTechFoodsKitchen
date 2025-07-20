@@ -18,7 +18,8 @@ namespace FastTechFoodsKitchen.Domain.Entities
         public List<KitchenOrderItem> Items { get; set; } = new();
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }
-       
+        public string DeliveryMethod { get; set; }
+
     }
 
     public class KitchenOrderItem

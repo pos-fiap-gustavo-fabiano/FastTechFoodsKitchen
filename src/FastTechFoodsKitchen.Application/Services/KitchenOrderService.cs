@@ -64,6 +64,7 @@ namespace FastTechFoodsKitchen.Application.Services
                         UnitPrice = item.UnitPrice 
                     }).ToList() ?? new List<KitchenOrderItem>(),
                     Total = orderCreatedMessage.Total,
+                    DeliveryMethod = orderCreatedMessage.DeliveryMethod,
                     CreatedAt = DateTime.UtcNow
                    
                 };
@@ -266,6 +267,7 @@ namespace FastTechFoodsKitchen.Application.Services
                     UnitPrice = item.UnitPrice,
                 }).ToList() ?? new List<KitchenOrderItemDto>(),
                 Total = order.Total,
+                DeliveryMethod = order.DeliveryMethod,
                 CreatedAt = order.CreatedAt,
                 UpdatedAt = order.UpdatedAt
             };

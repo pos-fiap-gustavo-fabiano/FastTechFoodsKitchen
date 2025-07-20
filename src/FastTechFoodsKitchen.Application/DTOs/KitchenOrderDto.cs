@@ -11,6 +11,7 @@ namespace FastTechFoodsKitchen.Application.DTOs
         public List<KitchenOrderItemDto> Items { get; set; } = new();
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
+        public string DeliveryMethod { get; internal set; }
     }
 
     public class KitchenOrderItemDto
