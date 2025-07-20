@@ -57,25 +57,25 @@ spec:
         securityContext:
           capabilities:
             add: ["SYS_RESOURCE"]
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "250m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
-        livenessProbe:
-          httpGet:
-            path: /health
-            port: 8080
-          initialDelaySeconds: 30
-          periodSeconds: 10
-        readinessProbe:
-          httpGet:
-            path: /health/ready
-            port: 8080
-          initialDelaySeconds: 5
-          periodSeconds: 5
+        # resources:
+        #   requests:
+        #     memory: "256Mi"
+        #     cpu: "250m"
+        #   limits:
+        #     memory: "512Mi"
+        #     cpu: "500m"
+        # livenessProbe:
+        #   httpGet:
+        #     path: /health
+        #     port: 8080
+        #   initialDelaySeconds: 30
+        #   periodSeconds: 10
+        # readinessProbe:
+        #   httpGet:
+        #     path: /health/ready
+        #     port: 8080
+        #   initialDelaySeconds: 5
+        #   periodSeconds: 5
       volumes:
       - name: config
         configMap:
@@ -88,25 +88,4 @@ spec:
             secretProviderClass: "fasttechfoods-kitchen-secrets"
       - name: tmp-volume
         emptyDir: {}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: fasttechfoods-kitchen-api-service
-  namespace: fasttechfoods
-  labels:
-    app: fasttechfoods-kitchen-api
-    component: service
-spec:
-  type: LoadBalancer
-  selector:
-    app: fasttechfoods-kitchen-api
-  ports:
-  - name: http
-    port: 80
-    targetPort: 8080
-    protocol: TCP
-  - name: https
-    port: 443
-    targetPort: 8081
-    protocol: TCP
+
