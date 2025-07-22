@@ -3,6 +3,7 @@ using FastTechFoodsKitchen.Application.DTOs.External;
 using FastTechFoodsKitchen.Application.Interfaces;
 using FastTechFoodsOrder.Shared.Enums;
 using FastTechFoodsOrder.Shared.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FastTechFoodsKitchen.Api.Controllers
@@ -19,7 +20,7 @@ namespace FastTechFoodsKitchen.Api.Controllers
         private readonly ILogger<OrdersController> _logger;
 
         public OrdersController(
-            IKitchenOrderService kitchenOrderService, 
+            IKitchenOrderService kitchenOrderService,
             ILogger<OrdersController> logger)
         {
             _kitchenOrderService = kitchenOrderService;
@@ -30,12 +31,13 @@ namespace FastTechFoodsKitchen.Api.Controllers
         /// Buscar pedidos da cozinha armazenados no banco de dados
         /// </summary>
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetOrders([FromQuery] string? status = null)
         {
             try
             {
                 IEnumerable<KitchenOrderDto> orders;
-                
+
                 if (!string.IsNullOrEmpty(status))
                 {
                     var statusEnum = OrderStatusUtils.ConvertStringToStatus(status);
@@ -49,7 +51,7 @@ namespace FastTechFoodsKitchen.Api.Controllers
                 {
                     orders = await _kitchenOrderService.GetOrdersAsync();
                 }
-                
+
                 return Ok(orders);
             }
             catch (Exception ex)
@@ -63,6 +65,7 @@ namespace FastTechFoodsKitchen.Api.Controllers
         /// Buscar pedido específico da cozinha pelo OrderId
         /// </summary>
         [HttpGet("{orderId}")]
+        [Authorize]
         public async Task<IActionResult> GetOrderById(string orderId)
         {
             try
@@ -85,6 +88,7 @@ namespace FastTechFoodsKitchen.Api.Controllers
         /// Buscar apenas pedidos pendentes (Received) da cozinha
         /// </summary>
         [HttpGet("pending")]
+        [Authorize]
         public async Task<IActionResult> GetPendingOrders()
         {
             try
@@ -101,6 +105,7 @@ namespace FastTechFoodsKitchen.Api.Controllers
 
         
         [HttpPut("{orderId}/status")]
+        [Authorize(Roles = "Employee,Admin, Manager")]
         public async Task<IActionResult> UpdateOrderStatusKitchen(string orderId, [FromBody] UpdateOrderStatusDto request)
         {
             try
