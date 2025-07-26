@@ -123,10 +123,10 @@ jobs:
           namespace: fasttechfoods
           action: deploy
           manifests: |
-            k8s/01-service-account.yaml
-            k8s/02-secret-provider-class.yaml
-            k8s/03-services.yaml
-            k8s/deployment.yaml
+            k8s/00-configmap.yaml
+            k8s/01-secret-provider.yaml
+            k8s/02-deployment.yaml
+            k8s/03-service.yaml
           images: |
             ${{ env.AZURE_CONTAINER_REGISTRY }}/${{ env.CONTAINER_NAME }}:latest
 
