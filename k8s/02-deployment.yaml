@@ -18,10 +18,10 @@ spec:
         app: fasttechfoods-kitchen-api
         azure.workload.identity/use: "true"
     spec:
-      serviceAccountName: fasttechfoods-kitchen-workload-identity-sa
+      serviceAccountName: fasttechfoods-auth-workload-identity-sa
       containers:
       - name: fasttechfoods-kitchen-api
-        image: hackathonpostech.azurecr.io/fasttechfoods-kitchen-api:latest
+        image: fasttechfoods.azurecr.io/fasttechfoods-kitchen-api:latest
         imagePullPolicy: Always
         ports:
         - name: http
