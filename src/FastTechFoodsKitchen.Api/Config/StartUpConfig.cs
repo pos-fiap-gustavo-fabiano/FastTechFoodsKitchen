@@ -16,22 +16,11 @@ namespace FastTechFoodsKitchen.Api.Config
             });
             builder.Services.AddFastTechFoodsObservabilityWithSerilog(builder.Configuration);
             builder.Services.AddFastTechFoodsPrometheus(builder.Configuration);
-            //builder.Services.Configure<OpenTelemetry.Trace.TracerProviderBuilder>(tracerBuilder =>
-            //{
-            //    tracerBuilder
-            //        .AddSource("FastTechFoodsKitchen.MessagePublisher")
-            //        .AddSource("FastTechFoodsKitchen.KitchenOrderService")
-            //        .AddSource("FastTechFoodsKitchen.Api")
-            //        .AddSource("FastTechFoodsKitchen.Controllers")
-            //        .AddSource("FastTechFoodsKitchen.Services");
-            //});
-
-            builder.Services.AddFastTechFoodsHealthChecksWithMongoDB(builder.Configuration, connectionString);
+                       builder.Services.AddFastTechFoodsHealthChecksWithMongoDB(builder.Configuration, connectionString);
         }
 
         public static void UseObservability(WebApplication app)
         {
-            app.UseFastTechFoodsHealthChecksUI();
             app.UseFastTechFoodsPrometheus();
         }
     }
