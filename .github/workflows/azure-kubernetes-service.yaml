@@ -122,7 +122,11 @@ jobs:
         with:
           namespace: fasttechfoods
           action: deploy
-          manifests: ${{ env.DEPLOYMENT_MANIFEST_PATH }}
+          manifests: |
+            k8s/01-service-account.yaml
+            k8s/02-secret-provider-class.yaml
+            k8s/03-services.yaml
+            k8s/deployment.yaml
           images: |
             ${{ env.AZURE_CONTAINER_REGISTRY }}/${{ env.CONTAINER_NAME }}:latest
 
