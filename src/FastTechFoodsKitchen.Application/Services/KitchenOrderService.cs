@@ -109,10 +109,11 @@ namespace FastTechFoodsKitchen.Application.Services
             await _messagePublisher.PublishOrderAcceptedAsync(new OrderAcceptedMessage()
             { 
                 OrderId = orderId,
+                EventType = "OrderAccepted",
                 EventDate = DateTime.Now,
                 Status = OrderStatusUtils.ConvertStatusToString(OrderStatus.Accepted),
                 UpdatedBy = acceptedBy,
-                
+                CustomerId = existingOrder.CustomerId
             });
         }
 
@@ -136,9 +137,11 @@ namespace FastTechFoodsKitchen.Application.Services
             await _messagePublisher.PublishOrderPreparingAsync(new OrderPreparingMessage()
             {
                 OrderId = orderId,
+                EventType = "OrderPreparing",
                 EventDate = DateTime.Now,
                 Status = OrderStatusUtils.ConvertStatusToString(OrderStatus.Preparing),
                 UpdatedBy = startedBy,
+                CustomerId = existingOrder.CustomerId
             });
         }
 
@@ -162,9 +165,11 @@ namespace FastTechFoodsKitchen.Application.Services
             await _messagePublisher.PublishOrderReadyAsync(new OrderReadyMessage()
             {
                 OrderId = orderId,
+                EventType = "OrderReady",
                 EventDate = DateTime.Now,
                 Status = OrderStatusUtils.ConvertStatusToString(OrderStatus.Ready),
                 UpdatedBy = completedBy,
+                CustomerId = existingOrder.CustomerId
             });
         }
 
@@ -185,10 +190,12 @@ namespace FastTechFoodsKitchen.Application.Services
             await _messagePublisher.PublishOrderCancelledAsync(new OrderCancelledMessage()
             {
                 OrderId = orderId,
+                EventType = "OrderCancelled",
                 EventDate = DateTime.Now,
                 Status = OrderStatusUtils.ConvertStatusToString(OrderStatus.Cancelled),
                 CancelledBy = cancelledBy,
                 CancelReason = reason,
+                CustomerId = existingOrder.CustomerId
             });
         }
 
